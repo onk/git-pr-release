@@ -19,7 +19,7 @@ module Git
           @no_fetch = false
         end
 
-        def start
+        def parse_options
           OptionParser.new do |opts|
             opts.on('-n', '--dry-run', 'Do not create/update a PR. Just prints out') do |v|
               @dry_run = v
@@ -31,8 +31,11 @@ module Git
               @no_fetch = v
             end
           end.parse!
+        end
 
+        def start
           ### Set up configuration
+          parse_options
           configure
 
           ### Fetch merged PRs
