@@ -49,6 +49,68 @@ RSpec.describe Git::Pr::Release::CLI do
     end
   end
 
+  describe "#parse_options" do
+    subject { @cli.parse_options }
+
+    before {
+      @cli = Git::Pr::Release::CLI.new
+    }
+
+    context "When no options are passed" do
+      before { ARGV.clear }
+      it {
+        subject
+        expect(@cli.instance_variable_get(:@dry_run)).to eq false
+        expect(@cli.instance_variable_get(:@json)).to eq false
+        expect(@cli.instance_variable_get(:@no_fetch)).to eq false
+      }
+    end
+
+    context "When -n" do
+      before {
+        ARGV.clear
+        ARGV << "-n"
+      }
+      it {
+        subject
+        expect(@cli.instance_variable_get(:@dry_run)).to eq true
+      }
+    end
+
+    context "When --dry-run" do
+      before {
+        ARGV.clear
+        ARGV << "--dry-run"
+      }
+      it {
+        subject
+        expect(@cli.instance_variable_get(:@dry_run)).to eq true
+      }
+    end
+
+    context "When --json" do
+      before {
+        ARGV.clear
+        ARGV << "--json"
+      }
+      it {
+        subject
+        expect(@cli.instance_variable_get(:@json)).to eq true
+      }
+    end
+
+    context "When --no-fetch" do
+      before {
+        ARGV.clear
+        ARGV << "--no-fetch"
+      }
+      it {
+        subject
+        expect(@cli.instance_variable_get(:@no_fetch)).to eq true
+      }
+    end
+  end
+
   describe "#configure" do
     subject { @cli.configure }
 
